@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <style>
+     </style>
+</head>
+<body>
+  <div id="app" class="calculator">
+    <div class="result">{{ currentNumber }}</div>
+    <div class="buttons">
+      <button @click="appendNumber('7')">7</button>
+      <button @click="appendNumber('8')">8</button>
+      <button @click="appendNumber('9')">9</button>
+      <button @click="appendNumber('4')">4</button>
+      <button @click="appendNumber('5')">5</button>
+      <button @click="appendNumber('6')">6</button>
+      <button @click="appendNumber('1')">1</button>
+      <button @click="appendNumber('2')">2</button>
+      <button @click="appendNumber('3')">3</button>
+      <button @click="appendNumber('0')">0</button>
+      <button @click="appendNumber('.')">.</button>
+      <button @click="clear()">C</button>
+    </div>
+    <div class="operators">
+      <button @click="setOperator('+')">+</button>
+      <button @click="setOperator('-')">-</button>
+      <button @click="setOperator('*')">*</button>
+      <button @click="setOperator('/')">/</button>
+      <button @click="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        currentNumber: '0',
+        operator: '',
+        storedNumber: null,
+      },
+      methods: {
+        appendNumber(number) {
+          if (this.currentNumber === '0' || this.operator) {
+            this.currentNumber = number;
+          } else {
+            this.currentNumber += number;
+          }
+        },
+        setOperator(operator) {
+          if (this.operator) {
+            this.calculate();
+          }
+          this.operator = operator;
+          this.storedNumber = parseFloat(this.currentNumber);
+          this.currentNumber = '0';
+        },
+        calculate() {
+          if (this.operator && this.storedNumber !== null) {
+            const current = parseFloat(this.currentNumber);
+            switch (this.operator) {
+              case '+':
+                this.currentNumber = (this.storedNumber + current).toString();
+                break;
+              case '-':
+                this.currentNumber = (this.storedNumber - current).toString();
+                break;
+              case '*':
+                this.currentNumber = (this.storedNumber * current).toString();
+                break;
+              case '/':
+                this.currentNumber = (this.storedNumber / current).toString();
+                break;
+            }
+            this.operator = '';
+            this.storedNumber = null;
+          }
+        },
+        clear() {
+          this.currentNumber = '0';
+          this.operator = '';
+          this.storedNumber = null;
+        },
+      },
+    });
+  </script>
+</body>
+</html>
